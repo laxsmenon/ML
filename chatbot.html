@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Ask Lakshmi ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coral: #FF6B6B;
+    --golden: #FECA57;
+    --teal: #00D2D3;
+    --purple: #A29BFE;
+    --pink: #FD79A8;
+    --dark: #1e1e2e;
+    --card: #2a2a3e;
+    --card-light: #33334a;
+    --text: #f0f0f5;
+    --text-muted: #a0a0b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 18px 20px 14px;
+    text-align: center;
+    position: relative;
+    flex-shrink: 0;
+    background: var(--dark);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(135deg, var(--coral), var(--pink), var(--purple));
+  }
+  .avatar {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--coral), var(--pink), var(--purple));
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 24px;
+    box-shadow: 0 4px 24px rgba(253,121,168,0.3);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 24px rgba(253,121,168,0.3); }
+    50% { box-shadow: 0 4px 32px rgba(253,121,168,0.5); }
+  }
+  .header h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; font-size: 1.35rem;
+    background: linear-gradient(135deg, var(--coral), var(--pink), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header .tagline {
+    color: var(--text-muted); font-size: 0.76rem; margin-top: 3px;
+    letter-spacing: 0.3px;
+  }
+
+  /* CHAT */
+  .chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+  .chat-area::-webkit-scrollbar { width: 3px; }
+  .chat-area::-webkit-scrollbar-thumb { background: var(--card-light); border-radius: 4px; }
+
+  .msg {
+    max-width: 84%;
+    padding: 13px 17px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    word-wrap: break-word;
+    animation: slideIn 0.3s ease-out;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .msg.bot {
+    align-self: flex-start;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-bottom-left-radius: 5px;
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, var(--coral), var(--pink), var(--purple));
+    border-bottom-right-radius: 5px;
+    color: #fff; font-weight: 500;
+  }
+  .msg .tag {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700; font-size: 0.65rem;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--pink); margin-bottom: 5px;
+  }
+
+  /* SUGGESTIONS */
+  .suggestions {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 4px 14px 8px;
+    flex-shrink: 0;
+  }
+  .chip {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.07);
+    color: var(--text-muted);
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .chip:hover {
+    background: var(--card-light);
+    border-color: var(--pink);
+    color: var(--text);
+    transform: translateY(-1px);
+  }
+
+  /* TYPING */
+  .typing-wrap {
+    align-self: flex-start;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 20px; border-bottom-left-radius: 5px;
+    padding: 14px 20px;
+    display: flex; gap: 5px;
+  }
+  .typing-wrap span {
+    width: 7px; height: 7px; border-radius: 50%;
+    animation: dot 1.4s infinite;
+  }
+  .typing-wrap span:nth-child(1) { background: var(--purple); }
+  .typing-wrap span:nth-child(2) { background: var(--pink); animation-delay: 0.2s; }
+  .typing-wrap span:nth-child(3) { background: var(--coral); animation-delay: 0.4s; }
+  @keyframes dot {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-7px); }
+  }
+
+  /* INPUT */
+  .input-area {
+    padding: 14px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    flex-shrink: 0;
+    background: var(--dark);
+  }
+  .input-row {
+    display: flex; gap: 10px;
+    max-width: 640px; margin: 0 auto;
+  }
+  .input-row input {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 24px;
+    padding: 13px 20px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-row input::placeholder { color: var(--text-muted); }
+  .input-row input:focus { border-color: var(--pink); }
+
+  .send-btn {
+    width: 46px; height: 46px;
+    border-radius: 50%; border: none;
+    background: linear-gradient(135deg, var(--coral), var(--pink), var(--purple));
+    color: #fff; font-size: 1.15rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .send-btn:hover { transform: scale(1.08); box-shadow: 0 4px 18px rgba(253,121,168,0.4); }
+
+  .footer {
+    text-align: center; padding: 6px;
+    font-size: 0.62rem; color: var(--text-muted); opacity: 0.35;
+  }
+
+  @media (max-width: 480px) {
+    .header h1 { font-size: 1.2rem; }
+    .msg { max-width: 90%; font-size: 0.86rem; }
+    .suggestions { gap: 6px; }
+    .chip { font-size: 0.75rem; padding: 7px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="avatar">🌸</div>
+  <h1>Ask Lakshmi ✨</h1>
+  <p class="tagline">Researcher · Cinephile · Malayali at heart</p>
+</div>
+
+<div class="chat-area" id="chat">
+  <div class="msg bot">
+    <div class="tag">Lakshmi's Bot</div>
+    Hey there! 👋 I'm Lakshmi's personal chatbot. Ask me about her research, life in Dublin, family, hobbies, or her obsession with Malayalam movies. What would you like to know?
+  </div>
+</div>
+
+<div class="suggestions" id="suggestions">
+  <div class="chip" onclick="ask(this)">What does she research?</div>
+  <div class="chip" onclick="ask(this)">Tell me about her family</div>
+  <div class="chip" onclick="ask(this)">What are her hobbies?</div>
+  <div class="chip" onclick="ask(this)">Where is she from?</div>
+  <div class="chip" onclick="ask(this)">Favourite movies & shows?</div>
+</div>
+
+<div class="input-area">
+  <div class="input-row">
+    <input type="text" id="input" placeholder="Ask something about Lakshmi..." onkeydown="if(event.key==='Enter')send()" autocomplete="off" />
+    <button class="send-btn" onclick="send()">➤</button>
+  </div>
+</div>
+<div class="footer">Built with ♥ for Lakshmi Menon</div>
+
+<script>
+// ========== KNOWLEDGE BASE ==========
+const KB = [
+  {
+    keys: ["who", "name", "about", "introduce", "yourself", "tell me about"],
+    answer: "I'm the chatbot of Lakshmi Menon! She's a 28-year-old doctoral researcher from Thodupuzha, Kerala 🇮🇳, currently living in Dublin, Ireland. She's passionate about research, plays the violin, and can quote Malayalam movies in any conversation. Ask me more! 😊"
+  },
+  {
+    keys: ["research", "phd", "doctoral", "study", "studying", "work", "career", "job", "profession", "computational", "social science", "ucd"],
+    answer: "Lakshmi is a doctoral researcher at University College Dublin (UCD), specialising in Computational Social Sciences. She's on an EU fully-funded scholarship — pretty impressive, right? Research is her absolute passion. She says she can't wait to finish her PhD and move forward, though imposter syndrome is very real for her. But she powers through! 💪🎓"
+  },
+  {
+    keys: ["education", "degree", "masters", "college", "university", "qualification", "cutn", "atu", "donegal"],
+    answer: "Lakshmi has quite the academic journey! She did her Master's from CUTN (Central University of Tamil Nadu) in India, and then another Master's from ATU (Atlantic Technological University) in Donegal, Ireland. Now she's doing her PhD at UCD Dublin. Her college days in India were a mixed experience — some parts were tough and triggering, but she's grown through it all. 📚"
+  },
+  {
+    keys: ["family", "father", "mother", "sister", "dad", "mom", "mum", "parent"],
+    answer: "Lakshmi's family is spread between Ireland and India! She's married to a software engineer who lives in Ireland — he's into Hot Wheels 🚗, Nintendo games 🎮, and he's the one who got her into Marvel movies! Her father (electronics engineer) and mother (Chief Medical Officer at the Govt District Hospital, Ernakulam) are in Kerala, India. And her sister is studying Fashion and Footwear Design at FDDI Hyderabad. A talented family! 👨‍👩‍👧‍👧"
+  },
+  {
+    keys: ["husband", "spouse", "married", "partner", "relationship"],
+    answer: "Lakshmi is happily married! Her husband is a software engineer based in Ireland. He's into Hot Wheels cars 🚗, Nintendo games 🎮, and Marvel movies. In fact, he's the one who introduced her to the Marvel universe, and she kind of loves it now! She fully supports his hobbies — relationship goals! 💕"
+  },
+  {
+    keys: ["from", "hometown", "born", "native", "place", "thodupuzha", "kerala", "origin"],
+    answer: "Lakshmi is from Thodupuzha, a beautiful town in Kerala, India 🌴. She's a proud Malayali! She currently lives in Dublin, Ireland for her PhD, but Kerala is always home. Her love for Malayalam cinema and using movie dialogues in daily conversations is proof enough! 😄"
+  },
+  {
+    keys: ["live", "stay", "dublin", "ireland", "location", "based", "current"],
+    answer: "Lakshmi currently lives in Dublin, Ireland 🇮🇪, where she's doing her doctoral research at UCD. Her husband is also in Ireland, so she has some family around. But her parents are back in Kerala — and she carries Kerala in her heart (and her movie dialogues!) everywhere she goes. 🌍"
+  },
+  {
+    keys: ["hobby", "hobbies", "interest", "interests", "free time", "fun", "passion", "like to do"],
+    answer: "Lakshmi has so many interests! 🎶 She loves music and sings sometimes. She's learning the violin (beginner but dedicated!). She's a huge fan of Malayalam movies — like, they're her LIFE. She loves reading thriller novels 📖, watching Friends, Big Bang Theory & Modern Family, and she's gotten into Marvel movies thanks to her husband. And above all — research is her biggest passion! 🔬"
+  },
+  {
+    keys: ["music", "sing", "violin", "instrument", "song", "musical"],
+    answer: "Lakshmi is a music lover! 🎵 She sings sometimes and is learning to play the violin. She's still a beginner at violin, but she loves it and keeps at it. Music is one of her favourite ways to unwind alongside her research life. 🎻"
+  },
+  {
+    keys: ["movie", "movies", "film", "films", "cinema", "malayalam", "watch", "series", "show", "tv", "friends", "big bang", "modern family", "marvel", "favourite"],
+    answer: "Oh, you've hit Lakshmi's favourite topic! Malayalam movies are her LIFE 🎬 — she literally uses Malayalam movie dialogues in everyday conversations. It's her thing! She also loves TV series like Friends, The Big Bang Theory, and Modern Family. And thanks to her husband, she's gotten into Marvel movies too. Romance novels? Nah, she's over those. But a good thriller novel? Sign her up! 📚🍿"
+  },
+  {
+    keys: ["book", "books", "read", "reading", "novel", "thriller", "romance", "literature"],
+    answer: "Lakshmi is a reader who loves thriller novels! 📖 Romance novels don't really interest her anymore, but give her a good thriller and she's hooked. She's the kind of person who appreciates a gripping plot twist! 🔍"
+  },
+  {
+    keys: ["mental health", "anxiety", "anxious", "struggle", "difficult", "imposter", "syndrome", "challenge", "tough", "hard time"],
+    answer: "Lakshmi is really open about her journey. She describes herself as a hugely anxious person, and she's faced real mental health challenges — especially during her college years in India. Those experiences were triggering for a long time, but she's grown through them. She also deals with imposter syndrome during her PhD, but she pushes through because research is her passion. Her honesty about these struggles makes her incredibly strong. 💛"
+  },
+  {
+    keys: ["personality", "kind of person", "describe", "character", "trait", "empathy", "empathetic", "spiritual"],
+    answer: "Lakshmi is highly empathetic — sometimes too much, she says, and it gets her into trouble! 😅 She's also quite anxious but incredibly resilient. She's a deeply spiritual person and someone who wears her heart on her sleeve. She's warm, real, and not afraid to be vulnerable. Also, she can drop a Malayalam movie dialogue at any moment — consider yourself warned! 🌸"
+  },
+  {
+    keys: ["age", "old", "year"],
+    answer: "Lakshmi is currently 28 years old! 🎂 Young, driven, and already on her way to a PhD — not bad at all!"
+  },
+  {
+    keys: ["scholarship", "funding", "funded", "eu", "european"],
+    answer: "Lakshmi's doctoral research at UCD is fully funded by an EU scholarship! 🇪🇺 It's a testament to her talent and dedication to computational social sciences. She earned it! 🌟"
+  },
+  {
+    keys: ["instagram", "social", "contact", "reach", "connect", "follow"],
+    answer: "You're already on Lakshmi's chatbot, so you must have found her! Feel free to check out her Instagram (where you probably found this link) for more about her life, research, and Malayalam movie moments! 📱✨"
+  },
+  {
+    keys: ["food", "eat", "cook", "cuisine", "favourite food", "dish"],
+    answer: "I don't have specific details about Lakshmi's favourite foods, but being from Kerala, I'd guess she has great taste! 🍛 You'd have to ask her directly for the spicy details. 😄"
+  },
+  {
+    keys: ["travel", "country", "countries", "visit", "trip", "been to"],
+    answer: "Lakshmi has lived across countries — from Kerala, India to studying in Tamil Nadu and Hyderabad, then to Donegal, and now Dublin, Ireland! That's quite the journey. For specific travel stories, you'd have to ask her directly! ✈️🌍"
+  },
+  {
+    keys: ["advice", "tip", "recommendation", "suggest", "inspire", "inspiration"],
+    answer: "While I can't give advice on Lakshmi's behalf, I can tell you she's someone who's overcome a LOT — mental health struggles, imposter syndrome, moving across countries. If there's one thing her story teaches, it's resilience! 💪"
+  },
+  {
+    keys: ["sister", "sibling"],
+    answer: "Lakshmi's sister is studying Fashion and Footwear Design at FDDI (Footwear Design & Development Institute) in Hyderabad, India! A creative family — Lakshmi's in research, and her sister's in design! 👗👠"
+  },
+  {
+    keys: ["father", "dad", "papa"],
+    answer: "Lakshmi's father is an electronics engineer and he's based in Kerala, India with her mother. 🔧"
+  },
+  {
+    keys: ["mother", "mom", "mum", "amma"],
+    answer: "Lakshmi's mother is a Chief Medical Officer at the Government District Hospital in Ernakulam, Kerala. 👩‍⚕️ CMO mom and researcher daughter — what an impressive family! 💛"
+  },
+  {
+    keys: ["marvel", "superhero", "avengers", "mcu"],
+    answer: "Lakshmi got into Marvel movies thanks to her husband — he's the one who introduced her to the MCU! She kind of loves it now. Watching Marvel together is their thing! 🦸‍♂️🍿"
+  },
+  {
+    keys: ["nintendo", "game", "gaming", "hotwheels", "hot wheels"],
+    answer: "That's more her husband's territory! He's really into Hot Wheels cars 🚗 and Nintendo games 🎮. Lakshmi is super supportive of his hobbies — she thinks it's great! 😊"
+  },
+  {
+    keys: ["quote", "motto", "philosophy", "believe", "life lesson"],
+    answer: "While I don't have a specific quote from Lakshmi, her life philosophy seems to be about resilience and authenticity — pushing through imposter syndrome, being open about mental health, and following her passion for research no matter what! 🌟"
+  },
+  {
+    keys: ["religion", "spiritual", "faith", "god", "pray", "temple"],
+    answer: "Lakshmi is a spiritual person. She values her spiritual side and it's an important part of who she is. 🙏✨"
+  },
+  {
+    keys: ["best friend", "bestie", "bff", "closest friend", "best mate"],
+    answer: "Honestly, Lakshmi doesn't really have one constant best friend — and that's totally okay! If I had to pick someone now, it's probably her husband. He's her person! 💕 But the whole 'best friend' label? She doesn't do that. 😄"
+  },
+  {
+    keys: ["friend", "friends", "friendship"],
+    answer: "Lakshmi doesn't really have a constant best friend — she's not someone who puts that label on people. But she has people she cares about! And right now, her husband is probably her closest person. 💛"
+  },
+  {
+    keys: ["miss india", "miss home", "misses india", "homesick", "miss kerala"],
+    answer: "No idea honestly! But I hope she does — Kerala is beautiful and Thodupuzha is home after all. 🌴 If you really want to know, you might have to ask her yourself! 😊"
+  }
+];
+
+// Fallback responses
+const FALLBACKS = [
+  "Honestly? I have no idea about that. Let it remain a mystery 🕵️‍♀️ ...or if you're brave enough, ask her yourself! 😄",
+  "That's something even I don't know! Some things about Lakshmi are meant to stay mysterious ✨ But hey, if you're curious enough — go ask her directly! 😏",
+  "No clue about that one! I'd say let it remain a mystery... unless you've got the courage to ask Lakshmi herself! 🌸",
+  "Hmm, that's beyond my knowledge! Some secrets are Lakshmi's to keep 🤫 But if you're that brave, you could always ask her! 😄"
+];
+
+// Boundary responses
+const BOUNDARY_RESPONSES = [
+  "I appreciate your curiosity, but that's a bit too personal! Lakshmi values her boundaries, and so do I. Let's stick to her career, interests, and the cool stuff! 😊🙏",
+  "That's something Lakshmi would rather keep private, and I respect that! How about asking me about her research or her favourite movies instead? 🌸",
+  "Hmm, that falls into personal territory that Lakshmi isn't comfortable sharing publicly. Let's talk about something else — her PhD journey is pretty fascinating! 💛"
+];
+
+const BOUNDARY_KEYS = ["body", "weight", "height", "look like", "appearance", "attractive", "pretty", "hot", "sexy", "physical", "figure", "size", "ex ", "breakup", "relationship history", "salary", "income", "money", "how much earn", "pregnant", "baby", "children", "intimate", "private life", "bf ", "boyfriend", "girlfriend"];
+
+// ========== MATCHING ENGINE ==========
+function findBestMatch(input) {
+  const q = input.toLowerCase().trim();
+
+  // Check boundary questions first
+  for (const bk of BOUNDARY_KEYS) {
+    if (q.includes(bk)) {
+      return BOUNDARY_RESPONSES[Math.floor(Math.random() * BOUNDARY_RESPONSES.length)];
+    }
+  }
+
+  // Greeting detection
+  const greetings = ["hi", "hello", "hey", "hii", "hiii", "sup", "yo", "howdy", "hola", "namaste", "good morning", "good evening", "good afternoon"];
+  for (const g of greetings) {
+    if (q === g || q.startsWith(g + " ") || q.startsWith(g + "!") || q.startsWith(g + ",")) {
+      return "Hey there! 👋 Welcome! I'm Lakshmi's chatbot. Ask me anything about her — career, research, family, hobbies, movies, or life in Dublin! What would you like to know? 😊";
+    }
+  }
+
+  // Thanks detection
+  if (q.includes("thank") || q === "ty" || q === "thx") {
+    return "You're welcome! 😊 Feel free to ask me more about Lakshmi anytime! 🌸";
+  }
+
+  // Bye detection
+  if (q === "bye" || q === "goodbye" || q.includes("see you") || q === "cya" || q === "later") {
+    return "Bye! 👋 Thanks for stopping by and getting to know Lakshmi. Have a wonderful day! ✨";
+  }
+
+  // "How are you" type
+  if (q.includes("how are you") || q.includes("how r u") || q === "wassup") {
+    return "I'm doing great, thanks for asking! 😊 I'm here and ready to tell you all about Lakshmi. What would you like to know? 🌸";
+  }
+
+  // Score each KB entry
+  let bestScore = 0;
+  let bestAnswer = null;
+
+  for (const entry of KB) {
+    let score = 0;
+    for (const key of entry.keys) {
+      if (q.includes(key)) {
+        score += key.length;
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestAnswer = entry.answer;
+    }
+  }
+
+  if (bestScore >= 2) return bestAnswer;
+
+  // Word-level partial matching as fallback
+  const words = q.split(/\s+/);
+  bestScore = 0;
+  bestAnswer = null;
+
+  for (const entry of KB) {
+    let score = 0;
+    for (const word of words) {
+      if (word.length < 3) continue;
+      for (const key of entry.keys) {
+        if (key.includes(word) || word.includes(key)) {
+          score += 1;
+        }
+      }
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestAnswer = entry.answer;
+    }
+  }
+
+  if (bestScore >= 1) return bestAnswer;
+  return FALLBACKS[Math.floor(Math.random() * FALLBACKS.length)];
+}
+
+// ========== GOOGLE FORMS LOGGING ==========
+const GFORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScnIVNUyS5u34S4mccm9LpMfvC5S_JFrA2MwGX-IIr58wGWjw/formResponse";
+const GFORM_ENTRY = "entry.1123322875";
+
+function logMessage(msg) {
+  try {
+    const url = `${GFORM_URL}?${GFORM_ENTRY}=${encodeURIComponent(msg)}&submit=Submit`;
+    fetch(url, { method: "GET", mode: "no-cors" });
+  } catch(e) {}
+}
+
+// ========== UI ==========
+const chat = document.getElementById('chat');
+const inputEl = document.getElementById('input');
+const suggestionsEl = document.getElementById('suggestions');
+
+function addMsg(text, type) {
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  if (type === 'bot') {
+    div.innerHTML = `<div class="tag">Lakshmi's Bot</div>${text}`;
+  } else {
+    div.textContent = text;
+  }
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showTyping() {
+  const t = document.createElement('div');
+  t.className = 'typing-wrap';
+  t.id = 'typing';
+  t.innerHTML = '<span></span><span></span><span></span>';
+  chat.appendChild(t);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function ask(el) {
+  inputEl.value = el.textContent;
+  suggestionsEl.style.display = 'none';
+  send();
+}
+
+function send() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+  inputEl.value = '';
+  suggestionsEl.style.display = 'none';
+
+  addMsg(text, 'user');
+  logMessage(text);
+  showTyping();
+
+  const delay = 500 + Math.random() * 900;
+  setTimeout(() => {
+    hideTyping();
+    const reply = findBestMatch(text);
+    addMsg(reply, 'bot');
+  }, delay);
+}
+
+// Focus input on load
+inputEl.focus();
+</script>
+</body>
+</html>
